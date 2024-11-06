@@ -1,0 +1,222 @@
+[gd_scene load_steps=11 format=3 uid="uid://derltarit2o0a"]
+
+[ext_resource type="Script" path="res://scenes/main.gd" id="1_3jtbj"]
+[ext_resource type="Texture2D" uid="uid://c5q5xx1omcwch" path="res://assets/japanese_tileset_64.png" id="2_4ag87"]
+[ext_resource type="Texture2D" uid="uid://b6j20kv0fmxgm" path="res://assets/john-s-lander-lightrocket-japanese-garden.jpg" id="2_epfvt"]
+[ext_resource type="Script" path="res://scenes/TileMap.gd" id="3_rtxx7"]
+[ext_resource type="Texture2D" uid="uid://ccrwv7tgmb6ng" path="res://assets/minesweeper_tileset.png" id="4_betr7"]
+[ext_resource type="Texture2D" uid="uid://crmuof0xo8s4t" path="res://assets/confetti_square.png" id="4_ehxri"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hxcfv"]
+texture = ExtResource("2_4ag87")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vbyos"]
+texture = ExtResource("4_betr7")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_7hqci"]
+tile_size = Vector2i(64, 64)
+sources/0 = SubResource("TileSetAtlasSource_hxcfv")
+sources/1 = SubResource("TileSetAtlasSource_vbyos")
+
+[sub_resource type="Gradient" id="Gradient_e1prn"]
+offsets = PackedFloat32Array(0, 0.333333, 0.653333, 1)
+colors = PackedColorArray(1, 0.5, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 0.5, 1, 1, 1, 0.5, 0.5, 1)
+
+[node name="Main" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3jtbj")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+alignment = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="VBoxContainer/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1152, 603)
+render_target_update_mode = 4
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="VBoxContainer/SubViewportContainer/SubViewport"]
+scroll_ignore_camera_zoom = true
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="VBoxContainer/SubViewportContainer/SubViewport/ParallaxBackground"]
+position = Vector2(576, 324)
+motion_scale = Vector2(0, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="VBoxContainer/SubViewportContainer/SubViewport/ParallaxBackground/ParallaxLayer"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_epfvt")
+
+[node name="TileMap" type="TileMap" parent="VBoxContainer/SubViewportContainer/SubViewport"]
+tile_set = SubResource("TileSet_7hqci")
+format = 2
+layer_0/name = "mines"
+script = ExtResource("3_rtxx7")
+
+[node name="Camera2D" type="Camera2D" parent="VBoxContainer/SubViewportContainer/SubViewport/TileMap"]
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="FlaggedLabel" type="Label" parent="VBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Mines Flagged: 1/2"
+
+[node name="NewGameButton" type="Button" parent="VBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "New Game"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="CanvasLayer"]
+position = Vector2(576, -32)
+emitting = false
+amount = 32
+lifetime = 1.7
+randomness = 0.5
+texture = ExtResource("4_ehxri")
+emission_shape = 3
+emission_rect_extents = Vector2(576, 1)
+direction = Vector2(0, 1)
+gravity = Vector2(0, 450)
+initial_velocity_max = 100.0
+angular_velocity_min = -720.0
+angular_velocity_max = 720.0
+scale_amount_min = 0.8
+scale_amount_max = 1.2
+color_initial_ramp = SubResource("Gradient_e1prn")
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="GameOverLabel" type="Label" parent="CanvasLayer/CenterContainer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 48
+text = "Win!"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="GameSetupPopup" type="Popup" parent="."]
+title = "Game Setup"
+initial_position = 2
+size = Vector2i(149, 222)
+visible = true
+borderless = false
+
+[node name="MarginContainer" type="MarginContainer" parent="GameSetupPopup"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameSetupPopup/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="GameSetupPopup/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="RowsLabel" type="Label" parent="GameSetupPopup/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Rows"
+
+[node name="RowsLineEdit" type="LineEdit" parent="GameSetupPopup/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="ColumnsLabel" type="Label" parent="GameSetupPopup/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Columns"
+
+[node name="ColumnsLineEdit" type="LineEdit" parent="GameSetupPopup/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="MinesLabel" type="Label" parent="GameSetupPopup/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Mines"
+
+[node name="MinesLineEdit" type="LineEdit" parent="GameSetupPopup/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="ThemeLabel" type="Label" parent="GameSetupPopup/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Choose a Theme:"
+
+[node name="ThemeOptionButton" type="OptionButton" parent="GameSetupPopup/MarginContainer/VBoxContainer"]
+layout_mode = 2
+item_count = 2
+selected = 0
+popup/item_0/text = "Japanese"
+popup/item_0/id = 0
+popup/item_1/text = "Dungeon"
+popup/item_1/id = 1
+
+[node name="HSeparator" type="HSeparator" parent="GameSetupPopup/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PlayButton" type="Button" parent="GameSetupPopup/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Play"
+
+[connection signal="pressed" from="VBoxContainer/PanelContainer/MarginContainer/NewGameButton" to="." method="_on_new_game_button_pressed"]
+[connection signal="item_selected" from="GameSetupPopup/MarginContainer/VBoxContainer/ThemeOptionButton" to="." method="_on_theme_option_button_item_selected"]
+[connection signal="pressed" from="GameSetupPopup/MarginContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
